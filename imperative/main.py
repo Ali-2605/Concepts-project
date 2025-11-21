@@ -65,12 +65,8 @@ def main():
     problem solving typical of imperative programming.
     """
     # TODO: Create initial board state (list of lists)
-    # TODO: Validate input board
-    # TODO: Create goal state
-    # TODO: Choose solving algorithm (BFS or DFS)
-    # TODO: Solve and time the operation
-    # TODO: Display solution path
-    # TODO: Show performance statistics (steps, time, etc.)
+    # TODO: DFS algorithm
+    # TODO: Print board
     pass
 
 

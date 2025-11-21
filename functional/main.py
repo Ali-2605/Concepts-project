@@ -91,9 +91,7 @@ def main():
     immutability throughout the solving process.
     """
     # TODO: Create initial board state
-    # TODO: Create goal state
-    # TODO: Call solve function
-    # TODO: Display solution path
+    # TODO: Display Solution
     # TODO: Demonstrate immutability - show original board unchanged
     pass
 
