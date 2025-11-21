@@ -25,10 +25,7 @@ Board = List[List[int]]
 def dfs(start: Board, goal: Board) -> Optional[List[Board]]:
     """
     Alternative solver using iterative depth-first search with stack.
-    
-    Demonstrates how imperative programming can implement different
-    algorithms using similar control structures but different data structures.
-    
+    Demonstrates how imperative programming can use similar control structures but different data structures.
     Args:
         start: Initial board configuration
         goal: Target goal configuration
@@ -46,9 +43,7 @@ def print_board(board: Board) -> None:
     """
     Display the board in a readable format.
     
-    Uses imperative loops to format and print the board state.
-    Side effects (printing) are common and accepted in imperative programming.
-    
+    Uses imperative loops to format and print the board state.    
     Args:
         board: Board state to display
     """

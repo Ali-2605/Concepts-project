@@ -72,10 +72,6 @@ def print_board(board: Board) -> None:
     """
     Display the board in a readable format.
     
-    Note: This function has a side effect (printing), which breaks pure
-    functional principles. In a strict functional approach, this would
-    return a string representation instead of printing directly.
-    
     Args:
         board: Board state to display
     """
