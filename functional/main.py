@@ -40,66 +40,6 @@ def find_zero(board: Board) -> Tuple[int, int]:
     pass
 
 
-def swap(board: Board, r1: int, c1: int, r2: int, c2: int) -> Board:
-    """
-    Create a new board with two positions swapped.
-    
-    This function maintains immutability by creating a completely new board
-    instead of modifying the existing one. This is a core principle of
-    functional programming - data structures are never mutated.
-    
-    Args:
-        board: Original immutable board
-        r1, c1: Row and column of first position
-        r2, c2: Row and column of second position
-        
-    Returns:
-        New board with positions swapped (original board unchanged)
-    """
-    # TODO: Create new board with swapped positions
-    # Convert to mutable structure, swap, convert back to immutable
-    # Ensure original board is never modified
-    pass
-
-
-def next_states(board: Board) -> List[Board]:
-    """
-    Generate all possible next board states from current position.
-    
-    Uses functional approach to generate new board states by moving the
-    empty space in valid directions (up, down, left, right).
-    Each generated state is a new immutable board.
-    
-    Args:
-        board: Current board state
-        
-    Returns:
-        List of new board states (all possible moves)
-    """
-    # TODO: Find empty space position
-    # TODO: Determine valid moves (within bounds)
-    # TODO: Generate new boards for each valid move using swap()
-    # TODO: Use functional composition to create clean data flow
-    pass
-
-
-def is_goal(board: Board, goal: Board) -> bool:
-    """
-    Check if current board matches the goal state.
-    
-    Pure function that compares two immutable board states.
-    
-    Args:
-        board: Current board state
-        goal: Target goal state
-        
-    Returns:
-        Boolean indicating if board matches goal
-    """
-    # TODO: Compare board states
-    pass
-
-
 def solve(board: Board, goal: Board, visited: Set[Board], path: List[Board] = None) -> Optional[List[Board]]:
     """
     Solve the puzzle using recursive depth-first search.
@@ -142,23 +82,6 @@ def print_board(board: Board) -> None:
     # TODO: Format and print board in 3x3 grid
     # TODO: Replace 0 with space or special character for empty tile
     pass
-
-
-def create_goal_state() -> Board:
-    """
-    Create the standard goal state for 8-puzzle.
-    
-    Returns the solved board configuration:
-    1 2 3
-    4 5 6  
-    7 8 0
-    
-    Returns:
-        Goal board state as immutable tuple structure
-    """
-    # TODO: Return the standard solved configuration
-    pass
-
 
 def main():
     """
