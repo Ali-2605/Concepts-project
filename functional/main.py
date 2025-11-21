@@ -22,24 +22,6 @@ from typing import Tuple, List, Set, Optional
 Board = Tuple[Tuple[int, ...], ...]
 
 
-def find_zero(board: Board) -> Tuple[int, int]:
-    """
-    Find the position of the empty space (0) on the board.
-    
-    Uses functional approach with recursion to locate the zero tile.
-    Returns coordinates as (row, col) tuple.
-    
-    Args:
-        board: Immutable board representation (tuple of tuples)
-        
-    Returns:
-        Tuple containing (row, col) position of the empty space
-    """
-    # TODO: Implement recursive search for zero position
-    # Avoid using loops - use recursion to traverse rows and columns
-    pass
-
-
 def solve(board: Board, goal: Board, visited: Set[Board], path: List[Board] = None) -> Optional[List[Board]]:
     """
     Solve the puzzle using recursive depth-first search.
@@ -87,7 +69,7 @@ def main():
     immutability throughout the solving process.
     """
     # TODO: Create initial board state
-    # TODO: Display Solution
+    # TODO: Display Solution    
     # TODO: Demonstrate immutability - show original board unchanged
     pass
 
