@@ -5,18 +5,27 @@ from typing import List, Tuple, Optional, Dict
 Board = List[List[int]]
 
 def board_to_tuple(board: Board) -> Tuple:
-   
-    return tuple(tuple(row) for row in board)
+    """Convert mutable board to immutable tuple for hashing."""
+    rows_as_tuples = []
+    for row in board:
+        rows_as_tuples.append(tuple(row))
+    return tuple(rows_as_tuples)
 
 
 def tuple_to_board(board_tuple: Tuple) -> Board:
-    
-    return [list(row) for row in board_tuple]
+    """Convert immutable tuple back to mutable board."""
+    board: Board = []
+    for row in board_tuple:
+        board.append(list(row))
+    return board
 
 
 def copy_board(board: Board) -> Board:
-    
-    return [row[:] for row in board]
+    """Create a deep copy of the board."""
+    new_board: Board = []
+    for row in board:
+        new_board.append(row[:])
+    return new_board
 
 
 def find_zero(board: Board) -> Tuple[int, int]:
@@ -83,8 +92,9 @@ def a_star_search(start: Board, goal: Board, max_iterations: int = 100000) -> Op
     iterations = 0
     
     while open_set and iterations < max_iterations:
-        iterations += 1
-
+        iterations = iterations + 1
+        
+        # Find the node with the lowest f_score
         best_idx = 0
         for i in range(1, len(open_set)):
             if open_set[i][0] < open_set[best_idx][0]:
@@ -114,30 +124,34 @@ def a_star_search(start: Board, goal: Board, max_iterations: int = 100000) -> Op
                 h_score = manhattan_distance(neighbor, goal)
                 f = tentative_g + h_score
                 
-                path_copy = [copy_board(b) for b in path]
+                path_copy = []
+                for b in path:
+                    path_copy.append(copy_board(b))
                 path_copy.append(copy_board(neighbor))
                 
 
                 open_set.append((f, counter, neighbor_tuple, path_copy))
-                counter += 1
+                counter = counter + 1
     
     return None
 
 
 def print_board(board: Board) -> None:
-
-    print("┌─────────┐")
+    """
+    Display the board in a readable format using imperative loops.
+    """
+    print("+-------+")
     
     for row in board:
-        print("│", end="")
+        print("|", end="")
         for tile in row:
             if tile == 0:
                 print("   ", end="")
             else:
                 print(f" {tile} ", end="")
-        print("│")
+        print("|")
     
-    print("└─────────┘")
+    print("+-------+")
     print()
 
 
