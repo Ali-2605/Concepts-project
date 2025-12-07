@@ -1,9 +1,9 @@
 from typing import List, Optional
+import heapq 
 
 Board = List[List[int]]
 
 def copy_board(board: Board) -> Board:
-    """Create a deep copy of the board."""
     new_board: Board = []
     for row in board:
         new_board.append(row[:])
@@ -11,11 +11,10 @@ def copy_board(board: Board) -> Board:
 
 
 def board_to_string(board: Board) -> str:
-    """Convert board to a custom string representation."""
     result = ""
     for row in board:
         for value in row:
-            result = result + str(value)
+            result = result + f"{value}"
     return result
 
 def manhattan_distance(board: Board, goal: Board) -> int:
@@ -38,10 +37,6 @@ def manhattan_distance(board: Board, goal: Board) -> int:
     return distance
 
 def get_neighbors(board: Board, zero_row: int, zero_col: int) -> List:
-    """
-    Get all valid neighboring boards and their corresponding zero positions.
-    Returns list containing [neighbors_list, zero_positions_list].
-    """
     neighbors = []
     zero_positions = []
     
@@ -79,7 +74,7 @@ def a_star_search(start: Board, goal: Board, max_iterations: int = 100000) -> Op
     open_set_item.extend([manhattan_distance(start, goal), 0, start, [start], zero_row, zero_col])
     
     open_set = []
-    open_set.append(open_set_item)
+    heapq.heappush(open_set, (manhattan_distance(start, goal), 0, start_hash, open_set_item))
     
     closed_set = []
     g_score = {start_hash: 0}
@@ -89,14 +84,7 @@ def a_star_search(start: Board, goal: Board, max_iterations: int = 100000) -> Op
     while open_set and iterations < max_iterations:
         iterations += 1
 
-        # Find the node with the lowest f_score
-        best_idx = 0
-        for i in range(1, len(open_set)):
-            if open_set[i][0] < open_set[best_idx][0]:
-                best_idx = i
-
-        current_item = open_set.pop(best_idx)
-        f_score = current_item[0]
+        f_score, _, current_hash, current_item = heapq.heappop(open_set)
         current_board = current_item[2]
         path = current_item[3]
         current_zero_row = current_item[4]
@@ -139,21 +127,18 @@ def a_star_search(start: Board, goal: Board, max_iterations: int = 100000) -> Op
                 path_copy = []
                 for board in path:
                     path_copy.append(copy_board(board))
-                path_copy.append(copy_board(neighbor)) # Cannot combine, part of loop
+                path_copy.append(copy_board(neighbor))
 
                 new_item = []
                 new_item.extend([f, counter, copy_board(neighbor), path_copy, neighbor_zero_row, neighbor_zero_col])
                 
-                open_set.append(new_item)
+                heapq.heappush(open_set, (f, counter, neighbor_hash, new_item))
                 counter += 1
 
     return None
 
 
 def print_board(board: Board) -> None:
-    """
-    Display the board in a readable format using imperative loops.
-    """
     print("+-------+")
     
     for row in board:
