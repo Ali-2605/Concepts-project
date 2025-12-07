@@ -1,4 +1,4 @@
-from typing import Tuple, List, Set, Optional
+from typing import Tuple, List, Optional
 
 Board = Tuple[
     Tuple[int, int, int],
@@ -143,7 +143,7 @@ def is_move_promising(move: Board, goal: Board, current_distance: int) -> bool:
 def solve(board: Board, goal: Board, path: List[Board] = None, max_depth: int = 40) -> Optional[List[Board]]:
     if path is None:
         path = [board]
-    
+   
     if len(path) > max_depth:
         return None
     
@@ -161,31 +161,43 @@ def solve(board: Board, goal: Board, path: List[Board] = None, max_depth: int = 
     possible_moves = next_states(board)
     sorted_moves = sort_moves_by_heuristic(possible_moves, goal)
     
-    for next_board in sorted_moves:
-        if (next_board not in path and 
-            is_move_promising(next_board, goal, current_distance)):
-            
+    def try_moves(moves: List[Board]) -> Optional[List[Board]]:
+        if not moves:
+            return None
+        
+        next_board = moves[0]
+        if next_board not in path and is_move_promising(next_board, goal, current_distance):
             result = solve(next_board, goal, path + [next_board], max_depth)
             if result:
                 return result
+        
+        return try_moves(moves[1:])
     
-    return None
+    return try_moves(sorted_moves)
 
 
-def print_board(board: Board) -> None:
-    print("┌─────────┐")
+def board_to_string(board: Board) -> str:
+    def format_row(row: Tuple[int, int, int]) -> str:
+        def format_tiles(col_idx: int) -> str:
+            if col_idx >= 3:
+                return ""
+            tile = row[col_idx]
+            tile_str = "   " if tile == 0 else f" {tile} "
+            return tile_str + format_tiles(col_idx + 1)
+        
+        return "│" + format_tiles(0) + "│\n"
     
-    for row in board:
-        print("│", end="")
-        for tile in row:
-            if tile == 0:
-                print("   ", end="")
-            else:
-                print(f" {tile} ", end="")
-        print("│")
+    def format_rows(row_idx: int) -> str:
+        if row_idx >= 3:
+            return ""
+        return format_row(board[row_idx]) + format_rows(row_idx + 1)
     
-    print("└─────────┘")
-    print()
+    return "┌─────────┐\n" + format_rows(0) + "└─────────┘\n"
+
+def format_solution_steps(solution: List[Board], step_idx: int = 0) -> str:
+    if step_idx >= len(solution):
+        return ""
+    return f"Step {step_idx}:\n" + board_to_string(solution[step_idx]) + format_solution_steps(solution, step_idx + 1)
 
 def main():
     initial_board: Board = (
@@ -200,28 +212,25 @@ def main():
         (7, 8, 0)   
     )
     
-    print("=== Functional 8-Puzzle Solver ===")
+    print("\nFunctional 8-Puzzle Solver:")
     print("\nInitial Board:")
-    print_board(initial_board)
+    print(board_to_string(initial_board), end="")
     
     print("Goal Board:")
-    print_board(goal_board)
+    print(board_to_string(goal_board), end="")
     
     print("Solving...\n")
-    
+
     solution = solve(initial_board, goal_board)
     
     if solution:
-        print(f"Solution found in {len(solution) - 1} moves:")
-        
-        for i, board_state in enumerate(solution):
-            print(f"Step {i}:")
-            print_board(board_state)
+        print(f"Solution found in {len(solution) - 1} moves:\n")
+        print(format_solution_steps(solution), end="")
     else:
         print("No solution found.")
     
-    print("Original board after solving (unchanged):")
-    print_board(initial_board)
-    
+    print("\nOriginal board after solving:")
+    print(board_to_string(initial_board), end="")
+
 if __name__ == "__main__":
     main()

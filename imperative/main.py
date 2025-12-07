@@ -9,7 +9,6 @@ def copy_board(board: Board) -> Board:
         new_board.append(row[:])
     return new_board
 
-
 def board_to_string(board: Board) -> str:
     result = ""
     for row in board:
@@ -137,7 +136,6 @@ def a_star_search(start: Board, goal: Board, max_iterations: int = 100000) -> Op
 
     return None
 
-
 def print_board(board: Board) -> None:
     print("+-------+")
     
@@ -152,7 +150,6 @@ def print_board(board: Board) -> None:
     
     print("+-------+")
     print()
-
 
 def main():
 
