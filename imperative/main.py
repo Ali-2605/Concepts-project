@@ -1,4 +1,4 @@
-from typing import List, Optional, Dict
+from typing import List, Optional
 
 Board = List[List[int]]
 
@@ -9,6 +9,33 @@ def copy_board(board: Board) -> Board:
         new_board.append(row[:])
     return new_board
 
+
+def board_to_string(board: Board) -> str:
+    """Convert board to a custom string representation."""
+    result = ""
+    for row in board:
+        for value in row:
+            result = result + str(value)
+    return result
+
+def manhattan_distance(board: Board, goal: Board) -> int:
+   
+    distance = 0
+    
+    goal_pos = {}
+    for row in range(3):
+        for col in range(3):
+            goal_pos[goal[row][col]] = (row, col)
+    
+
+    for row in range(3):
+        for col in range(3):
+            tile = board[row][col]
+            if tile != 0:
+                goal_row, goal_col = goal_pos[tile]
+                distance += abs(row - goal_row) + abs(col - goal_col)
+    
+    return distance
 
 def get_neighbors(board: Board, zero_row: int, zero_col: int) -> List:
     """
@@ -36,45 +63,25 @@ def get_neighbors(board: Board, zero_row: int, zero_col: int) -> List:
     result.extend([neighbors, zero_positions])
     return result
 
-def manhattan_distance(board: Board, goal: Board) -> int:
-   
-    distance = 0
-    
-    goal_pos = {}
-    for row in range(3):
-        for col in range(3):
-            goal_pos[goal[row][col]] = (row, col)
-    
-
-    for row in range(3):
-        for col in range(3):
-            tile = board[row][col]
-            if tile != 0:
-                goal_row, goal_col = goal_pos[tile]
-                distance += abs(row - goal_row) + abs(col - goal_col)
-    
-    return distance
-
 def a_star_search(start: Board, goal: Board, max_iterations: int = 100000) -> Optional[List[Board]]:
-    start_hash = str(start)
-    goal_hash = str(goal)
+    start_hash = board_to_string(start)
+    goal_hash = board_to_string(goal)
 
-    start_board_copy = copy_board(start)
     zero_row = 0
     zero_col = 0
-    for row in range(len(start_board_copy)):
-        for col in range(len(start_board_copy[row])):
-            if start_board_copy[row][col] == 0:
+    for row in range(len(start)):
+        for col in range(len(start[row])):
+            if start[row][col] == 0:
                 zero_row = row
                 zero_col = col
 
     open_set_item = []
-    open_set_item.extend([manhattan_distance(start, goal), 0, start_board_copy, [start_board_copy], zero_row, zero_col])
+    open_set_item.extend([manhattan_distance(start, goal), 0, start, [start], zero_row, zero_col])
     
     open_set = []
     open_set.append(open_set_item)
     
-    closed_set = set()
+    closed_set = []
     g_score = {start_hash: 0}
     counter = 1
     iterations = 0
@@ -95,12 +102,12 @@ def a_star_search(start: Board, goal: Board, max_iterations: int = 100000) -> Op
         current_zero_row = current_item[4]
         current_zero_col = current_item[5]
         
-        current_hash = str(current_board)
+        current_hash = board_to_string(current_board)
 
         if current_hash == goal_hash:
             return path
 
-        closed_set.add(current_hash)
+        closed_set.append(current_hash)
         current_g = g_score[current_hash]
 
         result = get_neighbors(current_board, current_zero_row, current_zero_col)
@@ -111,9 +118,15 @@ def a_star_search(start: Board, goal: Board, max_iterations: int = 100000) -> Op
             neighbor = neighbors[i]
             neighbor_zero_row = zero_positions[i][0]
             neighbor_zero_col = zero_positions[i][1]
-            neighbor_hash = str(neighbor)
+            neighbor_hash = board_to_string(neighbor)
 
-            if neighbor_hash in closed_set:
+            found = False
+            for item in closed_set:
+                if item == neighbor_hash:
+                    found = True
+                    break
+            
+            if found:
                 continue
 
             tentative_g = current_g + 1
@@ -124,8 +137,8 @@ def a_star_search(start: Board, goal: Board, max_iterations: int = 100000) -> Op
                 f = tentative_g + h_score
 
                 path_copy = []
-                for b in path:
-                    path_copy.append(copy_board(b))
+                for board in path:
+                    path_copy.append(copy_board(board))
                 path_copy.append(copy_board(neighbor)) # Cannot combine, part of loop
 
                 new_item = []
@@ -176,7 +189,7 @@ def main():
     print("Goal Board:")
     print_board(goal_board)
     
-    print("Solving using A* search...\n")
+    print("Solving...\n")
 
     solution = a_star_search(initial_board, goal_board)
     
