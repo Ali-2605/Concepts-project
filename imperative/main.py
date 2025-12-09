@@ -137,18 +137,18 @@ def a_star_search(start: Board, goal: Board, max_iterations: int = 100000) -> Op
     return None
 
 def print_board(board: Board) -> None:
-    print("+-------+")
+    print("┌─────────┐")
     
     for row in board:
-        print("|", end="")
+        print("│", end="")
         for tile in row:
             if tile == 0:
                 print("   ", end="")
             else:
                 print(f" {tile} ", end="")
-        print("|")
+        print("│")
     
-    print("+-------+")
+    print("└─────────┘")
     print()
 
 def main():
